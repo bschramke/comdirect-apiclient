@@ -7,6 +7,8 @@ import com.github.bschramke.comdirect.rest.ComdirectApiClient
 
 fun main(args: Array<String>) = ComdirectCliApp().main(args)
 
+val apiClientKeyValueStore by lazy { InMemoryKeyValueStore() }
+
 class ComdirectCliApp : CliktCommand() {
   val clientId: String by option(help="The client_id you got from comdirect.").prompt("Your client_id")
   val clientSecret: String by option(help="The client_secret you got from comdirect.").prompt("Your client_secret")
@@ -14,7 +16,7 @@ class ComdirectCliApp : CliktCommand() {
   val pin: String by option(help="The PIN you use for login to comdirect web portal.").prompt("Your PIN")
 
   override fun run() {
-    val apiClient = ComdirectApiClient(clientId, clientSecret)
+    val apiClient = ComdirectApiClient(clientId, clientSecret, ComdirectApiClient.defaultConfig(apiClientKeyValueStore))
     val result = apiClient.loginCustomer(zugangsnummer, pin)
     echo("Got session list with ${result.size} entries.")
     result.forEach {
@@ -22,5 +24,6 @@ class ComdirectCliApp : CliktCommand() {
       echo("Session TAN is ${if(it.isSessionTanActive) "activated" else "not activated"}")
       echo("Session ${if(it.hasActivated2FA) "has" else "has not"} activated 2FA")
     }
+    echo("Finished")
   }
 }
