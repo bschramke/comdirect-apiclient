@@ -15,7 +15,12 @@ class ComdirectCliApp : CliktCommand() {
 
   override fun run() {
     val apiClient = ComdirectApiClient(clientId, clientSecret)
-    val tokenResult = apiClient.loginCustomer(zugangsnummer, pin)
-    echo("Got accessToken => ${tokenResult.accessToken}")
+    val result = apiClient.loginCustomer(zugangsnummer, pin)
+    echo("Got session list with ${result.size} entries.")
+    result.forEach {
+      echo("Found session with id ${it.identifier}")
+      echo("Session TAN is ${if(it.isSessionTanActive) "activated" else "not activated"}")
+      echo("Session ${if(it.hasActivated2FA) "has" else "has not"} activated 2FA")
+    }
   }
 }
