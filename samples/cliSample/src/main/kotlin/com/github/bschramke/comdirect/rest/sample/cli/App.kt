@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.bschramke.comdirect.rest.ComdirectApiClient
+import com.github.bschramke.comdirect.rest.model.LoginResult
 
 fun main(args: Array<String>) = ComdirectCliApp().main(args)
 
@@ -18,12 +19,10 @@ class ComdirectCliApp : CliktCommand() {
   override fun run() {
     val apiClient = ComdirectApiClient(clientId, clientSecret, ComdirectApiClient.defaultConfig(apiClientKeyValueStore))
     val result = apiClient.loginCustomer(zugangsnummer, pin)
-    echo("Got session list with ${result.size} entries.")
-    result.forEach {
-      echo("Found session with id ${it.identifier}")
-      echo("Session TAN is ${if(it.isSessionTanActive) "activated" else "not activated"}")
-      echo("Session ${if(it.hasActivated2FA) "has" else "has not"} activated 2FA")
+
+    when(result) {
+      is LoginResult.Failure -> echo("Login was not successful")
+      is LoginResult.Success -> echo("Login was successful")
     }
-    echo("Finished")
   }
 }

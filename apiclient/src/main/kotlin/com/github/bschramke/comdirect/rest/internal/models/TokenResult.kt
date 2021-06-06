@@ -1,10 +1,12 @@
-package com.github.bschramke.comdirect.rest.model
+package com.github.bschramke.comdirect.rest.internal.models
 
+import com.github.bschramke.comdirect.rest.model.TokenInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.math.exp
 
 @Serializable
-data class TokenResult(
+internal data class TokenResult(
   @SerialName("access_token")
   val accessToken: String,
   @SerialName("refresh_token")
@@ -21,4 +23,11 @@ data class TokenResult(
   val bpid: Long,
   @SerialName("kontaktId")
   val kontaktId: Long
-)
+) {
+  val tokenInfo by lazy { TokenInfo(
+    accessToken = accessToken,
+    refreshToken = refreshToken,
+    expiresIn = expiresIn,
+    scope = scope
+  )}
+}

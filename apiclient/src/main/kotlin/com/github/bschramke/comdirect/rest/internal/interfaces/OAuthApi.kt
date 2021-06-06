@@ -1,6 +1,6 @@
-package com.github.bschramke.comdirect.rest.interfaces
+package com.github.bschramke.comdirect.rest.internal.interfaces
 
-import com.github.bschramke.comdirect.rest.model.TokenResult
+import com.github.bschramke.comdirect.rest.internal.models.TokenResult
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

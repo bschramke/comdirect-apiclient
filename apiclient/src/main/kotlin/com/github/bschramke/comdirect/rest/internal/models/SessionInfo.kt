@@ -1,12 +1,12 @@
-package com.github.bschramke.comdirect.rest.model
+package com.github.bschramke.comdirect.rest.internal.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-typealias SessionResultArray = Array<SessionResult>
+internal typealias SessionInfoArray = Array<SessionInfo>
 
 @Serializable
-data class SessionResult(
+internal data class SessionInfo(
   @SerialName("identifier")
   val identifier: String,
   @SerialName("sessionTanActive")
