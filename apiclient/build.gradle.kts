@@ -26,6 +26,7 @@ publishing {
     }
   }
 }
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         apiVersion = "1.4"

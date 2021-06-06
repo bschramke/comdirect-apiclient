@@ -11,3 +11,4 @@ pluginManagement {
 }
 
 include("apiclient")
+include(":samples:cliSample")
