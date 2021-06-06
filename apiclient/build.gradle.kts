@@ -1,19 +1,31 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    `java-library`
-    kotlin("jvm")
-    id("org.jetbrains.dokka")
-    `maven-publish`
+  `java-library`
+  kotlin("jvm")
+  kotlin("plugin.serialization")
+  id("org.jetbrains.dokka")
+  `maven-publish`
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+  implementation(kotlin("stdlib-jdk8"))
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+
+  // define a BOM and its version
+  implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
+
+  // define any required OkHttp artifacts without version
+  implementation("com.squareup.okhttp3:okhttp")
+  implementation("com.squareup.okhttp3:logging-interceptor")
+
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 }
 
 publishing {
@@ -28,12 +40,12 @@ publishing {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        apiVersion = "1.4"
-        languageVersion = "1.4"
-        jvmTarget = "1.8"
-        useIR = true
-    }
+  kotlinOptions {
+    apiVersion = "1.4"
+    languageVersion = "1.4"
+    jvmTarget = "1.8"
+    useIR = true
+  }
 }
 
 fun configurePom(pom: MavenPom) {
