@@ -22,3 +22,4 @@ limitations under the License.
 [changelog]: https://github.com/bschramke/comdirect-apiclient/blob/main/CHANGELOG.md
 [kotlin]: https://kotlinlang.org/
 [okhttp]: https://square.github.io/okhttp/
+[comdirect_api_swagger]: https://www.comdirect.de/cms/media/comdirect_rest_api_swagger.json

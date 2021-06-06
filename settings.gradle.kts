@@ -9,3 +9,5 @@ pluginManagement {
         mavenCentral()
     }
 }
+
+include("apiclient")
