@@ -19,7 +19,7 @@ class ComdirectCliApp : CliktCommand() {
   val pin: String by option(help="The PIN you use for login to comdirect web portal.").prompt("Your PIN")
 
   override fun run() {
-    val apiClient = ComdirectApiClient(clientId, clientSecret, ComdirectApiClient.defaultConfig(apiClientKeyValueStore))
+    val apiClient = ComdirectApiClient(clientId, clientSecret, ComdirectApiClient.defaultConfig(apiClientKeyValueStore, apiClientKeyValueStore))
     val result = apiClient.loginCustomer(zugangsnummer, pin, ::onTanChallenge)
 
     when(result) {
@@ -28,7 +28,7 @@ class ComdirectCliApp : CliktCommand() {
     }
   }
 
-  internal fun onTanChallenge(challenge: TanChallenge):String? = when(challenge) {
+  private fun onTanChallenge(challenge: TanChallenge):String? = when(challenge) {
     is TanChallenge.MobileTanChallenge -> onMobileTanChallenge(challenge)
     is TanChallenge.PhotoTanChallenge -> onPhotoTanChallenge(challenge)
     is TanChallenge.PushTanChallenge -> null

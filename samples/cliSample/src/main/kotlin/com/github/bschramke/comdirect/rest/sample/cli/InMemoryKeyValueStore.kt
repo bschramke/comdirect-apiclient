@@ -1,8 +1,12 @@
 package com.github.bschramke.comdirect.rest.sample.cli
 
+import com.github.bschramke.comdirect.rest.model.TokenInfo
+import com.github.bschramke.comdirect.rest.model.decodeTokenInfoFromJson
+import com.github.bschramke.comdirect.rest.model.toJsonString
 import com.github.bschramke.comdirect.rest.util.KeyValueStore
+import com.github.bschramke.comdirect.rest.util.TokenInfoStore
 
-class InMemoryKeyValueStore : KeyValueStore {
+class InMemoryKeyValueStore : KeyValueStore, TokenInfoStore {
   private val data = mutableMapOf<String, Any>()
 
   override fun read(key: String): Any?  = data[key]
@@ -50,5 +54,23 @@ class InMemoryKeyValueStore : KeyValueStore {
 
   override fun writeLong(key: String, value: Long) {
     data[key] = value
+  }
+
+  //##########################################################
+  //# Implement TokenInfoStore
+  //##########################################################
+  private val KEY_TOKEN_INFO = "TOKEN_INFO"
+  override fun writeTokenInfo(value: TokenInfo) {
+    writeString(KEY_TOKEN_INFO, value.toJsonString())
+  }
+
+  override fun readTokenInfo(): TokenInfo? = decodeTokenInfoFromJson(
+    readString(KEY_TOKEN_INFO, "null")
+  )
+
+  override fun hasTokenInfo(): Boolean = read(KEY_TOKEN_INFO) != null
+
+  override fun removeTokenInfo() {
+    data.remove(KEY_TOKEN_INFO)
   }
 }

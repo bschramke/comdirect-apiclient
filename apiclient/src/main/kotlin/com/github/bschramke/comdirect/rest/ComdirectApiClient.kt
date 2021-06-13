@@ -8,6 +8,7 @@ import com.github.bschramke.comdirect.rest.internal.models.XHttpRequestInfo
 import com.github.bschramke.comdirect.rest.internal.models.createXHttpRequestInfo
 import com.github.bschramke.comdirect.rest.model.*
 import com.github.bschramke.comdirect.rest.util.KeyValueStore
+import com.github.bschramke.comdirect.rest.util.TokenInfoStore
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import okhttp3.OkHttpClient
@@ -21,6 +22,9 @@ class ComdirectApiClient(
 ) {
   private val keyValueStore
     get() = config.keyValueStore
+
+  private val tokenStore
+    get() = config.tokenStore
 
   private val oAuthApi by lazy { createRetrofitApi(OAuthApi::class.java) }
   private val sessionApi by lazy { createRetrofitApi(SessionApi::class.java) }
@@ -56,6 +60,7 @@ class ComdirectApiClient(
     }
 
     val tokenResult = tokenResponse.body()!!
+    tokenStore.writeTokenInfo(tokenResult.tokenInfo)
     requestInfo = createXHttpRequestInfo(createSessionId())
 
     // Step2 : Request session with access token
@@ -111,14 +116,16 @@ class ComdirectApiClient(
   data class Config(
     val baseUrl: String,
     val keyValueStore: KeyValueStore,
+    val tokenStore: TokenInfoStore,
     val okHttpClientFactory: () -> OkHttpClient,
     val retrofitFactory: (baseUrl: String, client: OkHttpClient) -> Retrofit
   )
 
   companion object {
-    fun defaultConfig(keyValueStore: KeyValueStore) = Config(
+    fun defaultConfig(keyValueStore: KeyValueStore, tokenInfoStore: TokenInfoStore) = Config(
       baseUrl = "https://api.comdirect.de",
       keyValueStore = keyValueStore,
+      tokenStore = tokenInfoStore,
       okHttpClientFactory = ::createDefaultOkHttpClient,
       retrofitFactory = ::createDefaultRetrofit
     )

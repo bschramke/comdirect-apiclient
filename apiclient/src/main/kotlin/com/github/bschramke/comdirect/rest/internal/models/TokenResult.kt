@@ -3,6 +3,7 @@ package com.github.bschramke.comdirect.rest.internal.models
 import com.github.bschramke.comdirect.rest.model.TokenInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.Instant
 import kotlin.math.exp
 
 @Serializable
@@ -27,7 +28,7 @@ internal data class TokenResult(
   val tokenInfo by lazy { TokenInfo(
     accessToken = accessToken,
     refreshToken = refreshToken,
-    expiresIn = expiresIn,
+    expiresAt = Instant.now().plusSeconds(expiresIn.toLong()),
     scope = scope
   )}
 }
