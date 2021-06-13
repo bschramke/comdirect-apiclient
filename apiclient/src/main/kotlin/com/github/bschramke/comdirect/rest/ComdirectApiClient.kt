@@ -3,6 +3,7 @@ package com.github.bschramke.comdirect.rest
 import com.github.bschramke.comdirect.rest.internal.interfaces.OAuthApi
 import com.github.bschramke.comdirect.rest.internal.interfaces.SessionApi
 import com.github.bschramke.comdirect.rest.internal.models.TanAuthInfo
+import com.github.bschramke.comdirect.rest.internal.models.TanType
 import com.github.bschramke.comdirect.rest.internal.models.XHttpRequestInfo
 import com.github.bschramke.comdirect.rest.internal.models.createXHttpRequestInfo
 import com.github.bschramke.comdirect.rest.model.*
@@ -38,7 +39,7 @@ class ComdirectApiClient(
 
   fun getOrCreateSessionId(): String = keyValueStore.readString(KEY_SESSION_ID) ?: createSessionId()
 
-  fun loginCustomer(zugangsnummer: String, pin: String): LoginResult {
+  fun loginCustomer(zugangsnummer: String, pin: String, onTanChallenge:(challenge: TanChallenge)->String?): LoginResult {
     // Step1 : Request OAuth tokens
     val tokenCall = oAuthApi.token(
       clientId = credentials.clientId,
@@ -91,7 +92,9 @@ class ComdirectApiClient(
       sessionTanResponse.headers()["x-once-authentication-info"]?.let { Json.decodeFromString<TanAuthInfo>(it) }
         ?: throw RuntimeException("Failed to extract tan challenge")
 
-    return LoginResult.Success(tokens = tokenResult.tokenInfo)
+    val tan = onTanChallenge(tanAuthInfo.toTanChallenge())
+
+    return if(tan.isNullOrBlank()) LoginResult.Failure else LoginResult.Success(tokens = tokenResult.tokenInfo)
   }
 
   private fun <T> createRetrofitApi(apiInterface: Class<T>) = config.retrofitFactory(

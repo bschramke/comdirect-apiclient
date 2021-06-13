@@ -1,10 +1,12 @@
 package com.github.bschramke.comdirect.rest.sample.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.output.TermUi
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.bschramke.comdirect.rest.ComdirectApiClient
 import com.github.bschramke.comdirect.rest.model.LoginResult
+import com.github.bschramke.comdirect.rest.model.TanChallenge
 
 fun main(args: Array<String>) = ComdirectCliApp().main(args)
 
@@ -18,11 +20,27 @@ class ComdirectCliApp : CliktCommand() {
 
   override fun run() {
     val apiClient = ComdirectApiClient(clientId, clientSecret, ComdirectApiClient.defaultConfig(apiClientKeyValueStore))
-    val result = apiClient.loginCustomer(zugangsnummer, pin)
+    val result = apiClient.loginCustomer(zugangsnummer, pin, ::onTanChallenge)
 
     when(result) {
       is LoginResult.Failure -> echo("Login was not successful")
       is LoginResult.Success -> echo("Login was successful")
     }
   }
+
+  internal fun onTanChallenge(challenge: TanChallenge):String? = when(challenge) {
+    is TanChallenge.MobileTanChallenge -> onMobileTanChallenge(challenge)
+    is TanChallenge.PhotoTanChallenge -> onPhotoTanChallenge(challenge)
+    is TanChallenge.PushTanChallenge -> null
+  }
+
+  private fun onMobileTanChallenge(challenge: TanChallenge.MobileTanChallenge):String? {
+    TermUi.echo("We have send a TAN to your phone ${challenge.phonenumber}.")
+    return TermUi.prompt("Enter TAN")
+  }
+
+  private fun onPhotoTanChallenge(challenge: TanChallenge.PhotoTanChallenge):String? {
+    return null
+  }
+
 }
