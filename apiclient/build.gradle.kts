@@ -15,17 +15,18 @@ java {
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+  implementation(libs.kotlinx.serialization.json)
 
-  // define a BOM and its version
-  implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
+  // Align versions of all OkHttp components
+  implementation(platform(libs.okhttp.bom))
 
   // define any required OkHttp artifacts without version
-  implementation("com.squareup.okhttp3:okhttp")
-  implementation("com.squareup.okhttp3:logging-interceptor")
+  implementation(libs.okhttp.core)
+  implementation(libs.okhttp.logging.interceptor)
 
-  implementation("com.squareup.retrofit2:retrofit:2.9.0")
-  implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+  implementation(libs.retrofit.core)
+  implementation(libs.retrofit.converter.kotlinx.serialization)
+
 }
 
 publishing {

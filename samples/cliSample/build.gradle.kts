@@ -17,11 +17,11 @@ java {
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+  implementation(libs.kotlinx.serialization.json)
 
   implementation(project(":apiclient"))
 
-  implementation("com.github.ajalt.clikt:clikt:3.2.0")
+  implementation(libs.clikt)
 }
 
 tasks.withType<KotlinCompile> {
