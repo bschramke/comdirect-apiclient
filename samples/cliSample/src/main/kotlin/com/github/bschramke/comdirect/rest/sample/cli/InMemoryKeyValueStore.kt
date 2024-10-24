@@ -13,7 +13,7 @@ class InMemoryKeyValueStore : KeyValueStore, TokenInfoStore {
 
   override fun readString(key: String): String? = when (val value = read(key)) {
     is String -> value
-    value != null -> value.toString()
+    (value != null) -> value.toString()
     else -> null
   }
 

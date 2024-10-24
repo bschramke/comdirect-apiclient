@@ -1,7 +1,7 @@
 plugins {
-  kotlin("jvm") version "1.5.0" apply false
-  kotlin("plugin.serialization") version "1.5.0" apply false
-  id("org.jetbrains.dokka") version "1.4.32" apply false
+  kotlin("jvm") version "1.9.25" apply false
+  kotlin("plugin.serialization") version "1.9.25" apply false
+  id("org.jetbrains.dokka") version "1.9.20" apply false
 }
 
 allprojects {
@@ -16,6 +16,6 @@ allprojects {
 tasks {
   named<Wrapper>("wrapper") {
     distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = "7.6.4"
+    gradleVersion = "8.8"
   }
 }
