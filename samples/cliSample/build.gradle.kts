@@ -27,6 +27,5 @@ tasks.withType<KotlinCompile> {
     apiVersion = "1.4"
     languageVersion = "1.4"
     jvmTarget = "1.8"
-    useIR = true
   }
 }

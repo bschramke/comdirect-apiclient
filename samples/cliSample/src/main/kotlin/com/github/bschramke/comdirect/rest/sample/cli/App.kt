@@ -31,7 +31,7 @@ class ComdirectCliApp : CliktCommand() {
   private fun onTanChallenge(challenge: TanChallenge):String? = when(challenge) {
     is TanChallenge.MobileTanChallenge -> onMobileTanChallenge(challenge)
     is TanChallenge.PhotoTanChallenge -> onPhotoTanChallenge(challenge)
-    is TanChallenge.PushTanChallenge -> null
+    is TanChallenge.PushTanChallenge -> onPushTanChallenge(challenge)
   }
 
   private fun onMobileTanChallenge(challenge: TanChallenge.MobileTanChallenge):String? {
@@ -40,7 +40,12 @@ class ComdirectCliApp : CliktCommand() {
   }
 
   private fun onPhotoTanChallenge(challenge: TanChallenge.PhotoTanChallenge):String? {
+    TermUi.echo("PhotoTAN is currently not supported by this app.")
     return null
   }
 
+  private fun onPushTanChallenge(challenge: TanChallenge.PushTanChallenge):String? {
+    TermUi.echo("PushTAN is currently not supported by this app.")
+    return null
+  }
 }
