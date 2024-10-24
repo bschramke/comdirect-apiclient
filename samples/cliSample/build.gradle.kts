@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("jvm")
+  kotlin("plugin.serialization")
   application
 }
 
@@ -16,6 +17,7 @@ java {
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
 
   implementation(project(":apiclient"))
 

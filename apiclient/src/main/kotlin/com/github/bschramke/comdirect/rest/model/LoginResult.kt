@@ -1,6 +1,7 @@
 package com.github.bschramke.comdirect.rest.model
 
 import com.github.bschramke.comdirect.rest.util.InstantAsStringSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString

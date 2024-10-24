@@ -7,10 +7,18 @@ import com.github.ajalt.clikt.parameters.options.prompt
 import com.github.bschramke.comdirect.rest.ComdirectApiClient
 import com.github.bschramke.comdirect.rest.model.LoginResult
 import com.github.bschramke.comdirect.rest.model.TanChallenge
+import com.github.bschramke.comdirect.rest.model.TokenInfo
+import java.io.File
+import java.time.Instant
 
 fun main(args: Array<String>) = ComdirectCliApp().main(args)
 
-val apiClientKeyValueStore by lazy { InMemoryKeyValueStore() }
+val apiClientKeyValueStore by lazy {
+  JsonFileStore(File(
+    Paths.applicationDataDir().toFile(),
+    "auth.json"
+  ))
+}
 
 class ComdirectCliApp : CliktCommand() {
   val clientId: String by option(help="The client_id you got from comdirect.").prompt("Your client_id")
